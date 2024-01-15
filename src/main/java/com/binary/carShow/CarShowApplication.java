@@ -1,10 +1,18 @@
 package com.binary.carShow;
 
+import com.binary.carShow.entity.Car;
+import com.binary.carShow.repository.CarRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 //@SpringBootApplication
 
@@ -15,8 +23,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //@Configuration				//used to define  a configuration class that provides beans in the Spring Boot app
 
 @SpringBootApplication
-public class CarShowApplication {
+public class CarShowApplication implements CommandLineRunner {
 
+	@Autowired		//keyword for it to be injected
+	private CarRepository carRepository;
 	private static final Logger logger = LoggerFactory.getLogger(CarShowApplication.class);
 
 	public static void main(String[] args) {
@@ -24,5 +34,30 @@ public class CarShowApplication {
 
 		logger.info("Application started");
 	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		List<Car> cars = Arrays.asList(
+				new Car("Ford", "Lighting", "Gray","FL-234",2023,75000),
+				new Car("Nissan", "Leaf", "Green","8FG-345",2022,40000),
+				new Car("Toyota", "Sienna", "Silver","CDF-233",2024,60000),
+				new Car("Honda", "Accord", "Whitey","HW-345",2024,57000)
+		);
+		carRepository.saveAll(cars);		//.saveAll is part of the CURDRepository we are extending on carRepository and let manipulate the SQL
+
+		carRepository
+				.findAll()
+				.forEach(car->logger.info(car.getMake()+" "+ car.getModel()));
+
+					//.findAll will show all the cars on the list
+	}
+
+	//ORM (Object Relational Mapping) : is a technique that allows you to fetch from and manipulate a database
+		//by using OOP paradigm.		(able to make tables directly and convert them to objects to manipulate it. back and forth)
+			// We do this with Hibernate!! ( the implementation of ORM)
+				// class Book (id,title,author,price) -> Table Book (id,title,author,price)
+					// entity -> table
+
+	//JPA (Java Persistent API):
 
 }
