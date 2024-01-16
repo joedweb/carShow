@@ -1,7 +1,9 @@
 package com.binary.carShow;
 
 import com.binary.carShow.entity.Car;
+import com.binary.carShow.entity.Owner;
 import com.binary.carShow.repository.CarRepository;
+import com.binary.carShow.repository.OwnerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,27 +29,39 @@ public class CarShowApplication implements CommandLineRunner {
 
 	@Autowired		//keyword for it to be injected
 	private CarRepository carRepository;
+
+	@Autowired
+	private OwnerRepository ownerRepository;		//inject the owner repository
 	private static final Logger logger = LoggerFactory.getLogger(CarShowApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(CarShowApplication.class, args);
-
 		logger.info("Application started");
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
+
+		Owner owner = new Owner("John", "Doe");			//create
+		Owner owner2 = new Owner("Jack", "Black");
+		ownerRepository.save(owner);		//saving witht the CRUD Repsoitoyry inside ownerRepository
+		ownerRepository.save(owner2);
+
 		List<Car> cars = Arrays.asList(
-				new Car("Ford", "Lighting", "Gray","FL-234",2023,75000),
-				new Car("Nissan", "Leaf", "Green","8FG-345",2022,40000),
-				new Car("Toyota", "Sienna", "Silver","CDF-233",2024,60000),
-				new Car("Honda", "Accord", "Whitey","HW-345",2024,57000)
+				new Car("Ford", "Lighting", "Gray","FL-234",2023,75000,owner),
+				new Car("Nissan", "Leaf", "Green","8FG-345",2022,40000,owner2),
+				new Car("Toyota", "Sienna", "Silver","CDF-233",2024,60000,owner2),
+				new Car("Honda", "Accord", "Whitey","HW-345",2024,57000,owner)
 		);
 		carRepository.saveAll(cars);		//.saveAll is part of the CURDRepository we are extending on carRepository and let manipulate the SQL
 
 		carRepository
 				.findAll()
 				.forEach(car->logger.info(car.getMake()+" "+ car.getModel()));
+
+		ownerRepository
+				.findAll()
+				.forEach(ow -> logger.info(ow.getFirstName()));
 
 					//.findAll will show all the cars on the list
 	}
@@ -58,6 +72,11 @@ public class CarShowApplication implements CommandLineRunner {
 				// class Book (id,title,author,price) -> Table Book (id,title,author,price)
 					// entity -> table
 
-	//JPA (Java Persistent API):
+	//JPA (Java Persistent API): specification for managing relational data in applications.
+		// It provides a programming interface for managing relational data in Java applications using object-relational mapping (ORM)
+		// techniques. JPA allows developers to map Java objects to database tables, making it easier to interact with databases using
+		// Java code.
+
+	//Entity: Class with the implementation structure of a table. To create them
 
 }

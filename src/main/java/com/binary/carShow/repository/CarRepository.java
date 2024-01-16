@@ -6,8 +6,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CarRepository extends CrudRepository<Car,Long> {         //lets you do the CRUD operations!!      <Class, id data type>
+public interface CarRepository extends CrudRepository<Car,Long> {      //lets you do the CRUD operations!!  <Entity class name, data type>
     //CRUD                              ^JPA also has one!! Similar
 
+    //Rest (Representational State Transfer)
+        //is an architectural style to create web services
+        //six constraints
+            //Stateless: The server does not hold any information about the client state
+            // Client and Server:
+            // Cacheable:
+            // Uniform Interface :
+            // Layered System :
+            // Code and Demand Option :
 
 }

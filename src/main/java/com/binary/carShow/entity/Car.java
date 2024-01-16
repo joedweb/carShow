@@ -19,19 +19,24 @@ public class Car {
     private int year;
     private double price;
 
+    @ManyToOne(fetch = FetchType.LAZY)       //many cars to one owner           .EAGER = will retrieve info of car AND owner, .LAZY just info of CAR and the owner IF needed
+    @JoinColumn(name = "owner")
+    private Owner owner;        //each owner can have multiple cars
+
     //---------------------------------------
 
     // EVERY Entity needs an empty constructor. HIBERNATE will use it
     public Car() {
     }
 
-    public Car( String make, String model, String color, String registerNumber, int year, double price) {
+    public Car( String make, String model, String color, String registerNumber, int year, double price, Owner owner) {
         this.make = make;
         this.model = model;
         this.color = color;
         this.registerNumber = registerNumber;
         this.year = year;
         this.price = price;
+        this.owner = owner;
     }
 
     public Long getId() {
@@ -88,5 +93,13 @@ public class Car {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Owner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
     }
 }
