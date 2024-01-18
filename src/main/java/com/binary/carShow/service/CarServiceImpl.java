@@ -1,6 +1,7 @@
 package com.binary.carShow.service;
 
 import com.binary.carShow.entity.Car;
+import com.binary.carShow.exception.ResourceNotFoundException;
 import com.binary.carShow.repository.CarRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatusCode;
@@ -25,21 +26,25 @@ public class CarServiceImpl implements CarService{
     }
 
 
-    //added 1/16
     @Override
     public Car getCarById(Long id) {            //when giving the id it may or may not exist on the table so
 //it's an optional, so we have to check if present, if not throw an exception
-        Optional<Car> optionalCar = carRepository.findById(id);
+        //Optional: is a container object used to represent a value that may or may not be present
 
+        //
+        Optional<Car> optionalCar = carRepository.findById(id);
             if(optionalCar.isPresent()){
                 return optionalCar.get();       //if present get the object
             } else{
-                throw new EntityNotFoundException("Car with id " + id + " not found");      //if not present throw exception
+                throw new ResourceNotFoundException("Car with id " + id + " not found");      //if not present throw exception
             }
-//Optional: is a container object used to represent a value that may or may not be present
+        //
+
+        //Can also do with Java 8:
+            // return carRepository.findById(id)
+            //.orElseThrow(()-> new ResourceNotFoundException("Car with id: " +id+ " not found"));
     }
 
-//added
     @Override
     public Car addCar( Car car) {
         return carRepository.save(car);
@@ -48,7 +53,6 @@ public class CarServiceImpl implements CarService{
     @Override
     public void deleteCarById(Long id) {
         carRepository.deleteById(id);       //would work but it won't check for presence
-
     }
 
     @Override
@@ -66,6 +70,16 @@ public class CarServiceImpl implements CarService{
 
         carRepository.save(existingCar);
         return existingCar;
+    }
+
+    @Override
+    public List<Car> getCarByMake(String make) {
+        return carRepository.getAllCarByMake(make);
+    }
+
+    @Override
+    public List<Car> getCarByMakeAndModel(String make, String model) {
+        return carRepository.getCarByMakeAndModel(make,model);
     }
 
 }

@@ -48,8 +48,7 @@ public class CarController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Car> deleteCarById(@PathVariable Long id){
-
-        carService.deleteCarById(id);
+        carService.deleteCarById(id);       //why outside?
         return new ResponseEntity<>(HttpStatus.ACCEPTED);           //accepts to delete
     }
 
@@ -58,6 +57,16 @@ public class CarController {
     public ResponseEntity<Car> updateCarById(@PathVariable Long id, @RequestBody Car car){
         return new ResponseEntity<>(carService.updateCarById(id,car), HttpStatus.ACCEPTED);
     }
+
+    @GetMapping("/make/{make}")
+   public ResponseEntity<List<Car>> getCarListByMake(@PathVariable String make){
+        return new ResponseEntity<>(carService.getCarByMake(make), HttpStatus.OK);
+   }
+
+   @GetMapping("makemodel/{make}/{model}")
+    public ResponseEntity<List<Car>> getCarByMakeAndModel(@PathVariable String make, @PathVariable String model){
+        return new ResponseEntity<>(carService.getCarByMakeAndModel(make,model), HttpStatus.OK);
+   }
 
 
 }

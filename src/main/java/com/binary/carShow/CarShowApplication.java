@@ -2,11 +2,12 @@ package com.binary.carShow;
 
 import com.binary.carShow.entity.Car;
 import com.binary.carShow.entity.Owner;
+import com.binary.carShow.entity.User;
 import com.binary.carShow.repository.CarRepository;
 import com.binary.carShow.repository.OwnerRepository;
+import com.binary.carShow.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -32,6 +33,12 @@ public class CarShowApplication implements CommandLineRunner {
 
 	@Autowired
 	private OwnerRepository ownerRepository;		//inject the owner repository
+
+	//Security!!
+	@Autowired
+	private UserRepository userRepository;
+
+
 	private static final Logger logger = LoggerFactory.getLogger(CarShowApplication.class);
 
 	public static void main(String[] args) {
@@ -60,10 +67,18 @@ public class CarShowApplication implements CommandLineRunner {
 				.forEach(car->logger.info(car.getMake()+" "+ car.getModel()));
 
 		ownerRepository
-				.findAll()
+				.findAll()					//.findAll will show all the cars on the list
 				.forEach(ow -> logger.info(ow.getFirstName()));
 
-					//.findAll will show all the cars on the list
+//----------------------------------------------------------------------------
+		// SECURITY
+
+		userRepository.save(new User("user", "$2y$12$Ze.Piikopw4og0jYRM3aCO9WUYrdFXPzdBElZ5pe5f55CGXkOS9GC", "USER"));
+		userRepository.save(new User("admin","$2y$12$7A1GXnAqDn9g.f3sFa3LCeOGVJrR6JOwGh3roWIyIRuAx.OLPgdzG" ,"ADMIN"));
+
+//-----------------------------------------------------------
+
+
 	}
 
 	//ORM (Object Relational Mapping) : is a technique that allows you to fetch from and manipulate a database
@@ -78,5 +93,9 @@ public class CarShowApplication implements CommandLineRunner {
 		// Java code.
 
 	//Entity: Class with the implementation structure of a table. To create them
+
+
+
+
 
 }
